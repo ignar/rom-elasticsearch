@@ -13,19 +13,18 @@ module ROM
       end
 
       class Update < ROM::Commands::Update
-        def execute(tuple)
+        def execute(data, tuple)
           attributes = input[tuple]
           validator.call(attributes)
-          result = relation.dataset.update(attributes.to_h)
+          result = relation.dataset.update(attributes.to_h, data[:_id])
           relation.get(result['_id'])
         end
       end
 
       class Delete < ROM::Commands::Delete
-        def execute
-          deleted = relation.dataset.to_a
-          relation.dataset.delete
-          deleted
+        def execute(data)
+          relation.dataset.delete(data[:_id])
+          data
         end
       end
     end

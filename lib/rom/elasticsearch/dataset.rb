@@ -12,6 +12,11 @@ module ROM
         @client, @options = client, options
       end
 
+      def count
+        result = client.count(options)
+        result['count']
+      end
+
       def bulk(data, custom_options = {})
         client.bulk(options.merge(body: data).merge(custom_options))
       end
@@ -23,7 +28,7 @@ module ROM
       alias_method :<<, :insert
 
       def update(data, id = options[:id])
-        client.update(options.merge(id: id, body: {doc: data}))
+        client.update(options.merge(id: id, body: { doc: data }))
       end
 
       def delete(id = options[:id])
@@ -31,7 +36,7 @@ module ROM
       end
 
       def delete_by(query)
-        client.delete_by_query(options.merge(body: {query: query}))
+        client.delete_by_query(options.merge(body: { query: query }))
       end
 
       def delete_all

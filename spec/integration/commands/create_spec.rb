@@ -1,36 +1,28 @@
-describe 'Commands / Create' do
+RSpec.describe 'Commands / Create' do
   let(:gateway) { ROM::Elasticsearch::Gateway.new(db_options) }
   let(:conn)    { gateway.connection }
 
   let!(:env) do
-    env = ROM::Environment.new
-    env.setup(:elasticsearch, db_options)
-    env.use :auto_registration
-    env
-  end
+    ROM.container(:elasticsearch, db_options) do |rom|
+      rom.relation(:users)
 
-  let(:rom)     { env.finalize.env }
-  let(:users)   { rom.command(:users) }
-  let(:data)    { Hash['name' => 'John Doe', 'street' => 'Main Street'] }
-
-  before { create_index(conn) }
-
-  before do
-    env.relation(:users) do
-      register_as :users
-      dataset :users
-    end
-
-    env.commands(:users) do
-      define(:create) do
-        input ->(attrs) { attrs.merge('street' => attrs['street'].upcase) }
+      rom.commands(:users) do
+        define(:create) do
+          input ->(attrs) { attrs.merge('street' => attrs['street'].upcase) }
+        end
       end
     end
   end
 
+  let(:rom)     { env }
+  let(:users)   { rom.commands[:users] }
+  let(:data)    { Hash['name' => 'John Doe', 'street' => 'Main Street'] }
+
+  before { create_index(conn) }
+
   it 'returns a tuple' do
     result = users.try do
-      users.create.call(data)
+      users[:create].call(data)
     end
 
     result = result.value.to_a.first

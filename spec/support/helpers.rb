@@ -2,7 +2,7 @@ module Helpers
   INDEX = 'rom-test'
 
   def db_options
-    {url: 'http://localhost:9200', index: INDEX}
+    { url: 'http://localhost:9200', index: INDEX }
   end
 
   def create_index(connection)

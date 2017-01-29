@@ -2,44 +2,39 @@ describe 'integration' do
   let(:gateway) { ROM::Elasticsearch::Gateway.new(db_options) }
   let(:conn)    { gateway.connection }
 
-  let!(:env) do
-    env = ROM::Environment.new
-    env.setup(:elasticsearch, db_options)
-    env.use :auto_registration
-    env
+  class User
+    attr_reader :name, :email
+
+    def initialize(attrs)
+      @name, @email = attrs.values_at(:name, :email)
+    end
   end
 
-  let(:rom)     { env.finalize.env }
+  let!(:env) do
+    ROM.container(:elasticsearch, db_options) do |rom|
+      rom.relation(:users) do
+        register_as :users
+        dataset :users
+      end
+
+      rom.mappers do
+        define(:users) do
+          model User
+          register_as :entity
+        end
+      end
+
+      rom.commands(:users) do
+        define :create
+      end
+    end
+  end
+
+  let(:rom)     { env }
   let(:user_id) { 3289 }
   let(:data)    { Hash[name: 'kwando', email: 'hannes@bemt.nu'] }
 
   before { create_index(conn) }
-
-  before do
-    class User
-      attr_reader :name, :email
-
-      def initialize(attrs)
-        @name, @email = attrs.values_at(:name, :email)
-      end
-    end
-
-    env.relation(:users) do
-      register_as :users
-      dataset :users
-    end
-
-    env.mappers do
-      define(:users) do
-        model User
-        register_as :entity
-      end
-    end
-
-    env.commands(:users) do
-      define :create
-    end
-  end
 
   context 'relation :users' do
     let(:users) { rom.relation(:users) }
@@ -58,7 +53,11 @@ describe 'integration' do
 
   context 'command :users' do
     let(:users)   { rom.command(:users) }
-    let!(:results) { users.create.get(user_id).call(data) }
+    let!(:results) {
+      p users.create.class
+      p users.methods.sort
+      users.create.get(user_id).call(data)
+    }
 
     it { expect(results).to be_an(ROM::Relation) }
     it { expect(results.to_a).to be_an(Array) }

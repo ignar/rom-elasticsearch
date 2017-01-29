@@ -1,4 +1,4 @@
-describe ROM::Elasticsearch::Dataset do
+RSpec.describe ROM::Elasticsearch::Dataset do
   let(:conn)    { Elasticsearch::Client.new(db_options) }
   let(:dataset) { ROM::Elasticsearch::Dataset.new(conn, index: db_options[:index], type: 'users') }
 
@@ -9,7 +9,12 @@ describe ROM::Elasticsearch::Dataset do
     dataset.insert(username: 'bob')
     dataset.insert(username: 'alice')
 
+
     refresh_index(conn)
+  end
+
+  after do
+    dataset.delete_all
   end
 
   context 'bulk query' do
@@ -57,9 +62,11 @@ describe ROM::Elasticsearch::Dataset do
 
   context 'objects deletion' do
     it 'works' do
-      expect(dataset.to_a.size).to eq(3)
+      expect(dataset.count).to eq(3)
       dataset.delete_all
-      expect(dataset.to_a.size).to eq(0)
+      refresh_index(conn)
+
+      expect(dataset.count).to eq(0)
     end
   end
 end

@@ -1,30 +1,28 @@
-describe 'Commands / Delete' do
+RSpec.describe 'Commands / Delete' do
   let(:gateway) { ROM::Elasticsearch::Gateway.new(db_options) }
   let(:conn)    { gateway.connection }
 
   let!(:env) do
-    env = ROM::Environment.new
-    env.setup(:elasticsearch, db_options)
-    env.use :auto_registration
-    env
+    ROM.container(:elasticsearch, db_options) do |rom|
+      rom.relation(:users) do
+        def by_id(id)
+          where(_id: id)
+        end
+      end
+
+      rom.commands(:users) do
+        define :delete
+      end
+    end
   end
 
-  let(:rom)     { env.finalize.env }
-  let(:users)   { rom.command(:users) }
+  let(:rom)     { env }
+  let(:users)   { rom.commands[:users] }
   let(:element) { rom.relation(:users).to_a.first }
 
   before { create_index(conn) }
 
   before do
-    env.relation(:users) do
-      register_as :users
-      dataset :users
-    end
-
-    env.commands(:users) do
-      define :delete
-    end
-
     [
       { name: 'John', street: 'Main Street' }
     ].each do |data|
@@ -35,14 +33,15 @@ describe 'Commands / Delete' do
   end
 
   it 'deletes all tuples in a restricted relation' do
+    found = gateway.dataset(:users).get(element[:_id]).to_a.first
     result = users.try do
-      users.delete.get(element[:_id]).call
+      users[:delete].with(found).call
     end
 
     result = result.value
 
-    expect(result.first[:name]).to eql('John')
-    expect(result.first[:street]).to eql('Main Street')
+    expect(result[:name]).to eql('John')
+    expect(result[:street]).to eql('Main Street')
 
     refresh_index(conn)
 
