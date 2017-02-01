@@ -24,6 +24,10 @@ module ROM
       def dataset(name)
         datasets[name.to_s] = Dataset.new(connection, index: index, type: name)
       end
+
+      def dataset?(name)
+        connection.indices.exists(index: index)
+      end
     end
   end
 end

@@ -17,12 +17,12 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'rom', '~> 2.0'
+  spec.add_dependency 'rom', '~> 3'
   spec.add_dependency 'elasticsearch', '~> 5.0'
 
   spec.add_development_dependency 'bundler', '~> 1.6'
-  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'rake', '~> 12.0'
   spec.add_development_dependency 'rspec', '~> 3.3.0'
-  spec.add_development_dependency 'inflecto'
+  spec.add_development_dependency 'inflecto', '~> 0.0.2'
   spec.add_development_dependency 'dotenv', '~> 2.2'
 end

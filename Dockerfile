@@ -1,4 +1,4 @@
-FROM ruby:2.1
+FROM ruby:2.2
 
 RUN mkdir -p /bundle && mkdir -p /app
 WORKDIR /app
