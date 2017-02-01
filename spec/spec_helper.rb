@@ -1,3 +1,6 @@
+require 'dotenv'
+Dotenv.load('.env.test')
+
 require 'rom/elasticsearch'
 require_relative 'support/helpers'
 

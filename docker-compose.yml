@@ -1,0 +1,19 @@
+version: '2'
+services:
+  app:
+    build: .
+    image: ruby:2.1
+    entrypoint: bin/entrypoint
+    volumes:
+      - .:/app
+      - bundle:/bundle
+    links:
+      - elasticsearch
+
+  elasticsearch:
+    image: elasticsearch:5.2
+    ports:
+      - '9200:9200'
+
+volumes:
+  bundle:

@@ -22,6 +22,11 @@ module ROM
       end
 
       def insert(data)
+        if data.has_key?(:id)
+          id = data.delete(:id)
+          @options = options.merge(id: id)
+        end
+
         client.index(options.merge(body: data))
       end
 

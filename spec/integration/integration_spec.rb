@@ -1,4 +1,4 @@
-describe 'integration' do
+RSpec.describe 'integration' do
   let(:gateway) { ROM::Elasticsearch::Gateway.new(db_options) }
   let(:conn)    { gateway.connection }
 
@@ -32,7 +32,7 @@ describe 'integration' do
 
   let(:rom)     { env }
   let(:user_id) { 3289 }
-  let(:data)    { Hash[name: 'kwando', email: 'hannes@bemt.nu'] }
+  let(:data)    { { id: user_id, name: 'kwando', email: 'hannes@bemt.nu' } }
 
   before { create_index(conn) }
 
@@ -54,9 +54,7 @@ describe 'integration' do
   context 'command :users' do
     let(:users)   { rom.command(:users) }
     let!(:results) {
-      p users.create.class
-      p users.methods.sort
-      users.create.get(user_id).call(data)
+      users.create.call(data)
     }
 
     it { expect(results).to be_an(ROM::Relation) }
