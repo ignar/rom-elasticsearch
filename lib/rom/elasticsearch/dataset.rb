@@ -86,10 +86,10 @@ module ROM
 
       def view
         results = if options[:id]
-          [client.get(options)]
-        else
-          client.search(options).fetch('hits').fetch('hits')
-        end
+                    [client.get(options)]
+                  else
+                    client.search(options).fetch('hits').fetch('hits')
+                  end
 
         results.map do |item|
           result = {}

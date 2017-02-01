@@ -1,6 +1,6 @@
 require 'rom/lint/spec'
 
-describe ROM::Elasticsearch::Gateway do
+RSpec.describe ROM::Elasticsearch::Gateway do
   let(:gateway) { ROM::Elasticsearch::Gateway }
   let(:opts)    { Hash[host: 'http://localhost:9200', index: 'rom-test'] }
   let(:uri)     { opts }
