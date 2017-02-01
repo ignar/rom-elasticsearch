@@ -1,4 +1,6 @@
 language: ruby
+services:
+  - docker
 rvm:
   - 2.2
 script:
