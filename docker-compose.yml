@@ -7,8 +7,9 @@ services:
     volumes:
       - .:/app
       - bundle:/bundle
-    links:
+    depends_on:
       - elasticsearch
+    command: ["./bin/wait-for-it.sh", "elasticsearch:9200", "--", "bundle", "exec", "rspec"]
 
   elasticsearch:
     image: elasticsearch:5.2
