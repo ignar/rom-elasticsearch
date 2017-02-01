@@ -35,7 +35,7 @@ RSpec.describe 'Commands / Delete' do
   it 'deletes all tuples in a restricted relation' do
     found = gateway.dataset(:users).get(element[:_id]).to_a.first
     result = users.try do
-      users[:delete].with(found).call
+      users.delete.with(found).call
     end
 
     result = result.value

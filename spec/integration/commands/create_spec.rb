@@ -22,7 +22,7 @@ RSpec.describe 'Commands / Create' do
 
   it 'returns a tuple' do
     result = users.try do
-      users[:create].call(data)
+      users.create.call(data)
     end
 
     result = result.value.to_a.first

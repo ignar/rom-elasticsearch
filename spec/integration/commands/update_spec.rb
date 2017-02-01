@@ -44,7 +44,7 @@ RSpec.describe 'Commands / Updates' do
   it 'partial updates on original data' do
     found = gateway.dataset(:users).get(element[:_id]).to_a.first
     result = users.try do
-      users[:update].with(found).call(street: '2nd Street')
+      users.update.with(found).call(street: '2nd Street')
     end
 
     result = result.value
