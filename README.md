@@ -1,5 +1,8 @@
 # Rom::Elasticsearch
 
+[![Code Climate](https://codeclimate.com/github/ignar/rom-elasticsearch/badges/gpa.svg)](https://codeclimate.com/github/ignar/rom-elasticsearch)
+[![Build Status](https://travis-ci.org/ignar/rom-elasticsearch.svg?branch=master)](https://travis-ci.org/ignar/rom-elasticsearch)
+
 Experimental Elasticsearch adapter for ROM.
 
 ## Installation
