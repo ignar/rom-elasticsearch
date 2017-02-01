@@ -4,4 +4,4 @@ services:
 rvm:
   - 2.2
 script:
-  - bundle exec rspec
+  - docker-compose run app
