@@ -72,6 +72,11 @@ module ROM
         query(query_string: {query: expression})
       end
 
+      def pagination(from, size)
+        @options = options.merge({from: from, size: size})
+        self
+      end
+
       def to_a
         view
       end

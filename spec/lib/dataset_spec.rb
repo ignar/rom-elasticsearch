@@ -60,6 +60,14 @@ RSpec.describe ROM::Elasticsearch::Dataset do
     end
   end
 
+  context 'pagination' do
+    let(:repo) { dataset.dup }
+    it '#pagination' do
+      result = repo.pagination(2, 1).search(size: 3).to_a
+      expect(result.size).to eq(1)
+    end
+  end
+
   context 'objects deletion' do
     it 'works' do
       expect(dataset.count).to eq(3)

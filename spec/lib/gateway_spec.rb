@@ -5,10 +5,6 @@ RSpec.describe ROM::Elasticsearch::Gateway do
   let(:opts)    { Hash[host: 'http://localhost:9200', index: 'rom-test'] }
   let(:uri)     { opts }
 
-  it_behaves_like "a rom gateway" do
-    let(:identifier) { :elasticsearch }
-  end
-
   describe '.new' do
     context 'default values' do
       let(:connection) { gateway.new(opts).connection }

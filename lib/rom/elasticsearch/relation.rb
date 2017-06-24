@@ -7,7 +7,7 @@ module ROM
 
       forward :search
       forward :<<, :insert, :bulk
-      forward :get, :filter, :sort, :query_string, :query
+      forward :get, :filter, :sort, :query_string, :query, :pagination
       forward :count
     end
   end
